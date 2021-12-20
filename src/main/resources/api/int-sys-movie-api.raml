@@ -1,0 +1,172 @@
+#%RAML 1.0
+title: int-sys-movie-api
+
+types:
+  booking: !include datatypes/booking.raml
+  transaction: !include datatypes/transaction.raml
+  updateslot: !include datatypes/updateslot.raml
+
+/movie:
+  get:
+    description: Fetch All Movie Details
+    responses:
+      200:
+        body:
+          application/json:
+            examples: !include examples/movie.raml
+  /{M_ID}:
+    get:
+      description: Fetch Movie with MID
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include examples/movieById.raml
+/theatre:
+  get:
+    description: Fetch All Theatre Details
+    responses:
+      200:
+        body:
+          application/json:
+            examples: !include examples/theatre.raml
+  /{T_ID}:
+    get:
+      description: Fetch Theatre with TID
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include examples/theatreById.raml
+  /gettheatrebycid:
+    /{C_ID}:
+      get:
+        description: Fetch Theatre ID with CID
+        responses:
+          200:
+            body:
+              application/json:
+                example: !include examples/theatreByCId.raml
+
+/availibility:
+  get:
+    description: Fetch movie availibility at a theatre
+    queryParameters:
+      M_ID : string
+      T_ID : string
+    responses:
+      200:
+        body:
+          application/json:
+            examples: !include examples/availibility.raml
+  /{T_ID}:
+    get:
+      description: To fetch M_ID being shown at T_ID
+      responses:
+        200:
+          body:
+            application/json:
+              examples: !include examples/mIdBytId.raml
+  /confirm:
+    patch:
+      description: Confirm the booking status of movie ticket
+      queryParameters:
+        B_ID : string
+      responses:
+        204:
+          body:
+            application/json:
+              examples: !include examples/confirmBooking.raml
+  /moviecity:
+    get:
+      description: Fetch movie availibility at a theatre
+      queryParameters:
+        M_ID : string
+        C_ID : string
+      responses:
+        200:
+          body:
+            application/json:
+              examples: !include examples/availibility.raml
+
+/slotavailibility:
+  get:
+    description: Fetch movie availibility at a theatre
+    queryParameters:
+      M_ID : string
+      T_ID : string
+      Slot : string
+      Date : string
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/availibility.raml
+  /updateslot:
+    patch:
+      description: Update the slot availability
+      body:
+        application/json:
+          type: updateslot
+      responses:
+        204:
+          body:
+            application/json:
+              examples: !include examples/slotupdate.raml
+/booking:
+  /{BID}:
+    get:
+      description: Fetch booking details with Booking Id
+      responses:
+        200:
+          body:
+            application/json:
+              examples: !include examples/bookingById.raml
+  /create:
+    post:
+      body:
+        application/json:
+          type: booking
+      responses:
+        201:
+          body:
+            application/json:
+              examples: !include examples/createBooking.raml
+  /confirm:
+    patch:
+      description: Confirm the booking status of movie ticket
+      queryParameters:
+        B_ID : string
+      responses:
+        204:
+          body:
+            application/json:
+              examples: !include examples/confirmBooking.raml
+  /transaction:
+    post:
+      description: Generate Transaction Details
+      body:
+        application/json:
+          type: transaction
+      responses:
+        201:
+          body:
+            application/json:
+              examples: !include examples/createTransaction.raml
+/city:
+  /allcities:
+    get:
+      description: To fetch list of all cities
+      responses:
+        200:
+          body:
+            application/json: 
+              examples : !include examples/cities.raml
+  /{cityname}:
+    get:
+      description: Fetch City Id
+      responses:
+        200:
+          body:
+            application/json: 
+              examples : !include examples/cityId.raml 

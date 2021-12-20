@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="implementation-test-suite.xml" />
+	<munit:test name="implementation-test-suite-getAllMoviesTest" doc:id="20b350dc-abd5-4fb0-bacf-2d8f0fb20e89" description="Test">
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="ef54cdda-77d2-42e9-bf47-4f0b3676f78f" >
+				<munit:payload value='      &#10;[&#10;  {&#10;    "ID": "100",&#10;    "NAME": "Baahubali1",&#10;    "DESCRIPTION": "Story on king",&#10;    "RELEASE_DATE": "2021-12-05T00:00:00",&#10;    "CATEOGRY": "War ",&#10;    "GENRE": "Fiction"&#10;  },&#10;  {&#10;    "ID": "101",&#10;    "NAME": "Dabang",&#10;    "DESCRIPTION": "Story on Cop",&#10;    "RELEASE_DATE": "2021-12-06T00:00:00",&#10;    "CATEOGRY": "Action",&#10;    "GENRE": "Comedy"&#10;  },&#10;  {&#10;    "ID": "102",&#10;    "NAME": "RRR",&#10;    "DESCRIPTION": "Historical",&#10;    "RELEASE_DATE": "2021-12-07T00:00:00",&#10;    "CATEOGRY": "Thriller",&#10;    "GENRE": "Drama"&#10;  },&#10;  {&#10;    "ID": "103",&#10;    "NAME": "Baahubali2",&#10;    "DESCRIPTION": "Story on King",&#10;    "RELEASE_DATE": "2021-12-08T00:00:00",&#10;    "CATEOGRY": "Action",&#10;    "GENRE": "Drama"&#10;  }&#10;]&#10;    ' mediaType="application/json" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to getAllMovies" doc:id="933f43fe-81b5-4d5d-815d-d0edde410f83" name="getAllMovies"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="eca26b43-f0eb-46d5-8ad9-e7b97b136fd5" is="#[MunitTools::notNullValue()]" message="Payload is null" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="implementation-test-suite-getMovieByIdTest" doc:id="8cd58358-4f05-4d60-b70d-c460ebb6ab1e" description="Test">
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="4add09aa-5baa-4298-ace2-3526748b1ba8" >
+				<munit:attributes value="#[{body:{getAllMovies:{MID:'100',NAME:'Baahubali1',DESCRIPTION:'Story on king',RELEASE_DATE:'2021-12-05T00:00:00',CATEOGRY:'War',GENRE:'Fiction'}}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to getMovieById" doc:id="ff7ca23b-94b6-452a-b6bb-da8d56410696" name="getMovieById"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="d46df23e-f406-43a0-9b41-b796c8d06fd9" is="#[MunitTools::notNullValue()]" message="Payload is null" expression="#[payload]"/>
+			<munit-tools:assert-that doc:name="Assert that" doc:id="cbb5c107-8dbd-40d0-8b96-625cbc36fff7" is="#[MunitTools::withMediaType('application/json')]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="implementation-test-suite-getAllTheatresTest" doc:id="3a99ee5e-b5b2-448a-9eb7-4b901f4efd71" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to getAllTheatres" doc:id="a8c4a306-b323-4251-8f09-80e683645c10" name="getAllTheatres"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="26de597a-996c-4b5a-82ab-4b88be09430c" expression="#[payload]" is="#[MunitTools::notNullValue()]" message="payload is null"/>
+			<munit-tools:assert-that doc:name="Assert that" doc:id="a2537fde-7101-4cbd-984d-38285aa83f28" expression="#[payload]" is="#[MunitTools::withMediaType('application/json')]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="implementation-test-suite-getTheatreByIdTest" doc:id="249376be-667c-4ddf-85f8-c3937487f869" description="Test">
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="89e07fee-07c2-4648-8f88-2d0d0bb3bae3" />
+			<flow-ref doc:name="Flow-ref to getTheatreById" doc:id="4c7660ff-98f3-4f1e-b1f0-e121b1a3d8f5" name="getTheatreById"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="b27cc9a4-7b20-4d69-a55a-df147031980d" message="payload is null" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+			<munit-tools:assert-that doc:name="Assert that" doc:id="de5a4553-3b0c-4fb0-a7d9-72408c9a7423" expression="#[payload]" is="#[MunitTools::withMediaType('application/json')]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="implementation-test-suite-getTheatreByCIdTest" doc:id="cc71d4e1-8aa3-475e-909a-41f3f52d4686" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to getTheatreByCId" doc:id="74a19936-bb8b-4361-8389-6d6eb6a446b5" name="getTheatreByCId"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="2ac53725-0e6e-497d-b32e-4fa75ea81bdc" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+			<munit-tools:assert-that doc:name="Assert that" doc:id="e4926dd7-7c5e-4174-bcb2-f570bab025ce" is="#[MunitTools::withMediaType('application/xml')]" message="Media type is incorrect " expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="implementation-test-suite-getSeatAvailibilityTest" doc:id="a06860f7-492e-4000-bc0a-72429ce03611" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to getSeatAvailibility" doc:id="396825f6-f2b5-4cfd-a93c-46115860e86b" name="getSeatAvailibility"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="a1583d64-bb13-4dda-bab7-80d335918e6c" message="Payload is null " expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+			<munit-tools:assert-that doc:name="Assert that" doc:id="ed69049b-61a8-4071-b204-549e2722c623" expression="#[payload]" is="#[MunitTools::withMediaType('application/json')]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="implementation-test-suite-getSeatAvailibilityByMidCidTest" doc:id="65acdd44-cd62-4f1f-8d6d-fa651e7a415a" description="Test">
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="599d2aac-a86a-4929-9d14-8ba655d86111" >
+				<munit:payload value="#[{uriParams:{M_ID:'100',C_ID:'300'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to getSeatAvailibilityByMidCid" doc:id="1cbb5a28-448c-47c4-a92c-5b8779d45013" name="getSeatAvailibilityByMidCid"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="1d7cfa67-1ae4-4288-b724-179af058553c" message="Payload is null " expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="implementation-test-suite-getSeatAvailibilityBySlotTest" doc:id="1007de2a-b095-4ba3-a9b4-6ce32424d5ec" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to getSeatAvailibilityBySlot" doc:id="5b1a8eca-8f13-43cd-bbe4-b552b8eec91e" name="getSeatAvailibilityBySlot"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="b7386af4-8a98-4198-a4c7-5d5651155c63" message="Payload is null " expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="implementation-test-suite-createBookingDetailsTest" doc:id="e995b52f-cb4d-40eb-b76e-3ba3f420d67c" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="479e86c2-b23f-4b97-a04a-d1cfad445a44" processor="set-variable">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="#[uuid()]" attributeName="value" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to createBookingDetails" doc:id="a015f084-e91b-48b8-b47e-347ea3d75c03" name="createBookingDetails"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="8bfa3af0-cf8a-4338-abbc-7bfcd97e669f" message="payload is null " expression="#[payload]" is="#[MunitTools::withMediaType('application/json')]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="implementation-test-suite-getBookingDetailsTest" doc:id="560ba459-0d52-4604-9bb3-9669ce9d5edf" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to getBookingDetails" doc:id="b4b6cc6e-825c-415c-84af-81dd966a33f8" name="getBookingDetails"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="d304d4f7-e2dc-426f-ab74-eaa8ce2071d1" message="payload in null " expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="implementation-test-suite-confirmMovieTicketTest" doc:id="a1b3d671-8762-421c-a5f3-433ba89cf3b4" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to confirmMovieTicket" doc:id="1b016cb0-222d-4dcb-a7a3-d23f090cdb5a" name="confirmMovieTicket"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="4814a33e-c4eb-4607-bd2a-ecb2192c702a" message="payload is null " expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="implementation-test-suite-createTransactionDetailsTest" doc:id="34d0e45c-bddf-4201-9876-3de16d94d6a0" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to createTransactionDetails" doc:id="c0afc11b-62a1-4d5b-b35d-6139b2e9d34b" name="createTransactionDetails"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="0ffe5477-19ee-4ca2-b63b-166bd66a0506" message="Media Type is incorrect" expression="#[payload]" is="#[MunitTools::withMediaType('application/json')]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="implementation-test-suite-getCIDfromCityNameTest" doc:id="51dd04d7-e577-4d93-a6c1-a30cca6f16e2" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to getCIDfromCityName" doc:id="f6e363ce-c4bb-4536-82bc-44ac453598f2" name="getCIDfromCityName"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="32606bde-3bcb-46b8-9ece-1d95e350f7cf" message="payload is null " expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="implementation-test-suite-getMovieAvailibilityFromTheatreIdTest" doc:id="5833a56d-0851-4aba-879d-99ef45d0a922" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to getMovieAvailibilityFromTheatreId" doc:id="bafbc5b7-9b45-464d-842f-1d3d24ae2348" name="getMovieAvailibilityFromTheatreId"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="160a7f17-a706-49fc-acdd-7b4251904cad" message="payload is null " expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="implementation-test-suite-getAllCitiesTest" doc:id="f9cc689b-1a63-42f8-877d-913d5b65d559" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to getAllCities" doc:id="1704e2bc-66c8-490b-bd41-bea6ad057131" name="getAllCities"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="1bd4c818-de67-4c41-95a8-ce5866a5f2e0" message="payload is null" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="implementation-test-suite-updateSeatAvailabilityTest" doc:id="10b5c1db-48fa-4c6c-893f-721186544527" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to updateSeatAvailability" doc:id="5a2c6753-613f-4e3c-ada6-bbb5cc4dfd2b" name="updateSeatAvailability"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="cfab5f9a-6fbd-4a6e-9dbf-e652347f3ab6" message="payload is not null " expression="#[payload]" is="#[MunitTools::nullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="implementation-test-suite-getAllMoviesTest1" doc:id="00fa5635-7129-41c8-ad98-6c3a548a1faa" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to getAllMovies" doc:id="e86d43ce-b3b6-4f0c-9468-a5f361e8be76" name="getAllMovies"/>
+		</munit:execution>
+	</munit:test>
+
+
+</mule>

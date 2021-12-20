@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+    <http:listener-config name="int-sys-movie-api-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8081" />
+    </http:listener-config>
+    <apikit:config name="int-sys-movie-api-config" api="int-sys-movie-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <api-gateway:autodiscovery apiId="17493186" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="75f3702b-ac9c-4e0a-9403-8ce658529cf5" flowRef="int-sys-movie-api-main" />
+	<flow name="int-sys-movie-api-main">
+        <http:listener config-ref="int-sys-movie-api-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="int-sys-movie-api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:BAD_REQUEST">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Bad request"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="int-sys-movie-api-console">
+        <http:listener config-ref="int-sys-movie-api-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="int-sys-movie-api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="patch:\booking\confirm:int-sys-movie-api-config">
+        <flow-ref doc:name="confirmMovieTicket" doc:id="6d017b26-7406-4c92-b0f7-ffb02db3a2c8" name="confirmMovieTicket"/>
+    </flow>
+    <flow name="get:\city\allcities:int-sys-movie-api-config">
+        <flow-ref doc:name="getAllCities" doc:id="d5eb2e53-7e0a-49c9-95c4-3938f0fc5bef" name="getAllCities"/>
+    </flow>
+    <flow name="get:\availibility:int-sys-movie-api-config">
+        <flow-ref doc:name="getSeatAvailibility" doc:id="22bfb53d-d276-4166-ad1b-782507480560" name="getSeatAvailibility"/>
+    </flow>
+    <flow name="get:\availibility\moviecity:int-sys-movie-api-config">
+        <flow-ref doc:name="getSeatAvailibilityByMidCid" doc:id="75c77216-02cc-4d7e-9f36-d15cb78ed171" name="getSeatAvailibilityByMidCid"/>
+    </flow>
+    <flow name="patch:\availibility\update:int-sys-movie-api-config">
+        <flow-ref doc:name="updateSeatAvailability" doc:id="dc01938e-dc0a-4f5f-9457-8c38f32b5d94" name="updateSeatAvailability"/>
+    </flow>
+    <flow name="get:\movie:int-sys-movie-api-config">
+        <flow-ref doc:name="getAllMovies" doc:id="bb445f18-af3e-4673-906f-4acbe6c26666" name="getAllMovies"/>
+    </flow>
+    <flow name="get:\slotavailibility:int-sys-movie-api-config">
+        <flow-ref doc:name="getSeatAvailibilityBySlot" doc:id="d26462ae-8e0b-418e-9f92-a7e3aaa2a3be" name="getSeatAvailibilityBySlot"/>
+    </flow>
+    <flow name="get:\theatre:int-sys-movie-api-config">
+        <flow-ref doc:name="getAllTheatres" doc:id="f9a39ad0-82aa-4f67-bcae-031be6033e15" name="getAllTheatres"/>
+    </flow>
+    <flow name="get:\booking\(BID):int-sys-movie-api-config">
+        <flow-ref doc:name="getBookingDetails" doc:id="fcecfcde-37f2-41d8-9102-d99c885ffa9b" name="getBookingDetails"/>
+    </flow>
+    <flow name="get:\theatre\gettheatrebycid\(C_ID):int-sys-movie-api-config">
+        <flow-ref doc:name="getTheatreIdFromCityId" doc:id="c096e6e0-d6fb-4ba3-98d2-03c2029b8013" name="getTheatreByCId"/>
+    </flow>
+    <flow name="get:\movie\(M_ID):int-sys-movie-api-config">
+        <flow-ref doc:name="getMovieById" doc:id="50baf8b8-141c-48c2-834f-955c78ccfe5c" name="getMovieById"/>
+    </flow>
+    <flow name="get:\theatre\(T_ID):int-sys-movie-api-config">
+        <flow-ref doc:name="getTheatreById" doc:id="568a3e19-5269-45b1-b807-25b9f0444c37" name="getTheatreById"/>
+    </flow>
+    <flow name="get:\availibility\(T_ID):int-sys-movie-api-config">
+        <flow-ref doc:name="getMovieIdFromTheatreId" doc:id="97b54bc8-f045-43c5-b68a-07e124934bd5" name="getMovieAvailibilityFromTheatreId"/>
+    </flow>
+    <flow name="get:\city\(cityname):int-sys-movie-api-config">
+        <flow-ref doc:name="getCIDfromCityName" doc:id="f6f4127f-f696-445d-ab1b-8f1e3ae29d44" name="getCIDfromCityName"/>
+    </flow>
+    <flow name="post:\booking\create:application\json:int-sys-movie-api-config">
+        <flow-ref doc:name="createBookingDetails" doc:id="e9ede745-b188-424c-a2f3-eb8884aa391b" name="createBookingDetails"/>
+    </flow>
+    <flow name="post:\booking\transaction:application\json:int-sys-movie-api-config">
+        <flow-ref doc:name="createTransactionDetails" doc:id="8e59b1de-4f86-485d-8661-ffe646f757cd" name="createTransactionDetails"/>
+    </flow>
+    <flow name="patch:\slotavailibility\updateslot:application\json:int-sys-movie-api-config">
+        <flow-ref doc:name="updateSeatAvailability" doc:id="57a5dc6d-15d5-407f-b079-6a23c26cf45b" name="updateSeatAvailability"/>
+		<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  StatusCode: 204,
+  Description: "Slot Availability Updated!"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+</mule>

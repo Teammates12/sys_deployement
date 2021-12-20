@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="a36177a3-d8af-42f9-9f45-baf49a0c9abf" >
+		<http:listener-connection host="0.0.0.0" port="8082" />
+	</http:listener-config>
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="3d1a2131-680b-47bc-ab67-aaba10f222d9" >
+		<db:my-sql-connection host="sql6.freesqldatabase.com" port="3306" user="sql6458830" password="kMfVK9c8cN" database="sql6458830" />
+	</db:config>
+	<flow name="getAllMovies" doc:id="9545961d-6bbf-4489-8476-23357e075c6c" >
+		<db:select doc:name="GetMovies" doc:id="1df75ffc-8084-46ed-ac12-90c27579505d" config-ref="Database_Config">
+			<db:sql><![CDATA[select * from Movie]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Query to Json" doc:id="2263c829-5311-44a4-8ed5-ddf967646630" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	ID: payload01.M_ID default "M100",
+	NAME: payload01.M_NAME default 0,
+	DESCRIPTION: payload01.M_DESCRIPTION default "",
+	RELEASE_DATE: payload01.M_RELEASEDATE as String,
+	CATEOGRY: payload01.M_CATEGORY as String,
+	GENRE: payload01.M_GENRE default ""
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="80286c67-e495-4285-a1b4-e306e1a4ec76" message="Fetch Successul, response sent"/>
+	</flow>
+	<flow name="getMovieById" doc:id="08ca90e4-f1e0-4389-a8d3-9fd7f610a275" >
+		<db:select doc:name="GetMovieByMId" doc:id="373f4666-ba83-4155-87e8-6c2825298615" config-ref="Database_Config">
+					<db:sql><![CDATA[select * from Movie where M_ID = :M_ID]]></db:sql>
+					<db:input-parameters><![CDATA[#[{"M_ID": attributes.uriParams.M_ID}]]]></db:input-parameters>
+				</db:select>
+		<ee:transform doc:name="Query to Json" doc:id="93cb8779-3265-497a-8ccf-751c43874c6a" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	ID: payload01.M_ID default "M100",
+	NAME: payload01.M_NAME default 0,
+	DESCRIPTION: payload01.M_DESCRIPTION default "",
+	RELEASE_DATE: payload01.M_RELEASEDATE as String,
+	CATEOGRY: payload01.M_CATEGORY as String,
+	GENRE: payload01.M_GENRE default ""
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="209eab73-7f6c-496b-bbd3-b836add568ef" />
+	</flow>
+	<flow name="getAllTheatres" doc:id="5f4a4a3c-2771-4480-8a48-15a917953d3e" >
+		<db:select doc:name="GetMovies" doc:id="0fb2c25d-7fe3-4877-b4a9-91383ade9536" config-ref="Database_Config">
+			<db:sql><![CDATA[select * from Theatre]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Query to Json" doc:id="8d2ff212-ee95-4429-b9f4-b3323d937190" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	THEATRE_ID: payload01.T_ID default "M100",
+	THEATRE_NAME: payload01.T_NAME default 0,
+	ADDRESS: payload01.T_ADDRESS default "",
+	CONTACT_NO: payload01.T_PHONENO as String,
+	CITY: payload01.T_CITY default ""
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="76a7880a-a68c-4b98-87cc-8a64cd4d05e7" message="Fetch Successul, response sent"/>
+	</flow>
+	<flow name="getTheatreById" doc:id="760568f0-e5e7-4e7a-afb2-ecb2f26da29b" >
+		<db:select doc:name="GetTheatreByTId" doc:id="c31eb5c0-e5c1-4945-8954-ae788d812622" config-ref="Database_Config">
+					<db:sql><![CDATA[select * from Theatre where T_ID = :T_ID]]></db:sql>
+					<db:input-parameters><![CDATA[#[{"T_ID": attributes.uriParams.T_ID}]]]></db:input-parameters>
+				</db:select>
+		<ee:transform doc:name="Query to Json" doc:id="6735de87-8547-4320-b441-4cf3dbe9ddb4">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	THEATRE_ID: payload01.T_ID default "M100",
+	THEATRE_NAME: payload01.T_NAME default 0,
+	ADDRESS: payload01.T_ADDRESS default "",
+	CONTACT_NO: payload01.T_PHONENO as String,
+	CITY: payload01.C_ID default ""
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="c4fcc499-4cb5-47b3-a3e6-fcd1c2a76725" />
+	</flow>
+	<flow name="getTheatreByCId" doc:id="1749c153-41fb-48d8-8581-a81314d169f4" >
+		<db:select doc:name="GetTheatreByCId" doc:id="ca05b5b9-2b1d-406f-b650-30077589b7fd" config-ref="Database_Config">
+					<db:sql><![CDATA[select * from Theatre where C_ID = :C_ID]]></db:sql>
+					<db:input-parameters><![CDATA[#[{"C_ID": attributes.uriParams.C_ID}]]]></db:input-parameters>
+				</db:select>
+		<ee:transform doc:name="Query to Json" doc:id="c5acd994-42e0-4fb5-a54a-7966352b212e">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	THEATRE_ID: payload01.T_ID default "M100",
+	THEATRE_NAME: payload01.T_NAME default 0,
+	ADDRESS: payload01.T_ADDRESS default "",
+	CONTACT_NO: payload01.T_PHONENO as String,
+	CITY: payload01.C_ID default ""
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="cc09ec83-e0bf-451b-adf9-1c795f63b024" />
+	</flow>
+	<flow name="getSeatAvailibility" doc:id="62aae259-5107-4d9e-9256-a5092fdaaa5c" >
+		<db:select doc:name="GetSeatAvailibility" doc:id="b5cd4d07-e8f0-465d-9c94-09b17a054677" config-ref="Database_Config">
+					<db:sql><![CDATA[select * from Movie_Availability where T_ID = :T_ID and M_ID = :M_ID]]></db:sql>
+					<db:input-parameters><![CDATA[#[{
+"T_ID": attributes.queryParams.T_ID,
+"M_ID": attributes.queryParams.M_ID
+}]]]></db:input-parameters>
+				</db:select>
+		<ee:transform doc:name="Query to Json" doc:id="4f3aaa5d-3952-4d59-a8e3-f0fe934b1741" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	M_ID: payload01.M_ID default "M100",
+	T_ID: payload01.T_ID default 0,
+	SLOTS: payload01.TIMINGS default "",
+	AVAILABLE_SEATS: payload01.AVAILABLE_SEATS as String,
+	DATE: payload01.DATE as String,
+	STATUS: payload01.STATUS default ""
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="e19bf992-f813-4f2b-b632-6bedd2a87caf" />
+	</flow>
+	<flow name="getSeatAvailibilityByMidCid" doc:id="e2e43f2e-5bea-41b4-9557-9fec13612458" >
+		<db:select doc:name="GetSeatAvailibility" doc:id="b89b44e3-90d4-47b9-a15e-f5c0026e9644" config-ref="Database_Config">
+					<db:sql><![CDATA[select * from Movie_Availability where C_ID = :C_ID and M_ID = :M_ID]]></db:sql>
+					<db:input-parameters><![CDATA[#[{
+"C_ID": attributes.queryParams.C_ID,
+"M_ID": attributes.queryParams.M_ID
+}]]]></db:input-parameters>
+				</db:select>
+		<ee:transform doc:name="Query to Json" doc:id="acfc3eeb-d98b-4b26-9825-3acd9ec6ca5a" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	M_ID: payload01.M_ID default "M100",
+	T_ID: payload01.T_ID default 0,
+	SLOTS: payload01.TIMINGS default "",
+	AVAILABLE_SEATS: payload01.AVAILABLE_SEATS as String,
+	DATE: payload01.DATE as String,
+	STATUS: payload01.STATUS default ""
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="bee3d70f-b526-4826-826d-a198a0ba0396" />
+	</flow>
+	<flow name="getSeatAvailibilityBySlot" doc:id="190a8a0a-0f05-49b2-aec7-6c91297413f5" >
+		<db:select doc:name="GetSeatAvailibilityBySlot" doc:id="24b68c0e-6234-4d73-a2c5-fe459eb9871c" config-ref="Database_Config">
+					<db:sql><![CDATA[Select * from Movie_Availability where T_ID = :T_ID and M_ID = :M_ID and TIMINGS = :SLOT
+and DATE = :DATE]]></db:sql>
+					<db:input-parameters><![CDATA[#[{
+"T_ID": attributes.queryParams.T_ID,
+"M_ID": attributes.queryParams.M_ID,
+"SLOT": attributes.queryParams.Slot,
+"DATE": attributes.queryParams.Date
+}]]]></db:input-parameters>
+				</db:select>
+		<ee:transform doc:name="Query to Json" doc:id="9e543715-24ce-443b-aa81-dfcc001d30bc" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	M_ID: payload01.M_ID default "M100",
+	T_ID: payload01.T_ID default 0,
+	SLOTS: payload01.TIMINGS default "",
+	AVAILABLE_SEATS: payload01.AVAILABLE_SEATS as String,
+	DATE: payload01.DATE as String,
+	STATUS: payload01.STATUS default ""
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="4927a59d-9044-4cea-8e54-9a07b91c3238" />
+	</flow>
+	<flow name="createBookingDetails" doc:id="0631f2bb-4da6-4b95-8c21-73dc356e36b5" >
+		<set-variable value="#[uuid()]" doc:name="Generate Booking Id" doc:id="a7d88469-0c95-4a65-b95d-3f288c580834" variableName="B_Id"/>
+		<db:insert doc:name="Insert" doc:id="7aa34ffa-f2ae-4940-a168-c2208e1b0c47" config-ref="Database_Config">
+			<db:sql ><![CDATA[Insert into Booking_Details(B_ID,SEAT_COUNT,SLOT,DATE,TOTAL_AMOUNT,M_ID,T_ID) values (:B_ID,:SEATS,:SLOT,:DATE,:TOTAL_AMOUNT,:M_ID,:T_ID)]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+"B_ID" : vars.B_Id,
+"SEATS" : payload.SEATS,
+"SLOT" : payload.SLOT,
+"DATE" : payload.DATE as Date,
+"TOTAL_AMOUNT" : payload.TOTAL_AMOUNT,
+"M_ID" : payload.M_ID,
+"T_ID" : payload.T_ID
+}]]]></db:input-parameters>
+		</db:insert>
+		<ee:transform doc:name="Transform Message" doc:id="0851eaf5-fd0b-40d8-be06-d675046132dd" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"StatusCode" : "201",
+	"Description" : "Booking Details Generated - Pending Payment",
+	"B_ID" : vars.B_Id
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="042f466d-ceff-4c87-a602-ec2cf65027f7" message="Booking Details Generated."/>
+	</flow>
+	<flow name="getBookingDetails" doc:id="7db523de-9752-4bb3-9a55-1cf6ececfbe5" >
+		<db:select doc:name="Get Booking Details" doc:id="b71277c2-7f4f-4401-8541-aff1534e396b" config-ref="Database_Config">
+			<db:sql ><![CDATA[select * from Booking_Details where B_ID = :B_ID]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+"B_ID" : attributes.uriParams.'BID'
+}]]]></db:input-parameters>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="b335acaf-24d4-42ec-afca-a28a28d2af51" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="498f87d2-71bb-459e-a05d-96bfb6801790" message="Booking Details fetched and response sent."/>
+	</flow>
+	<flow name="confirmMovieTicket" doc:id="d7d3a94f-c50d-46b0-8a8d-2449da2d66fa" >
+		<db:update doc:name="Update Status in Booking Details" doc:id="72af3f09-748e-4177-a154-9b77365f08e2" config-ref="Database_Config">
+			<db:sql ><![CDATA[UPDATE Booking_Details SET STATUS = 'CONFIRMED' WHERE B_ID = :B_ID]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+"B_ID" : attributes.queryParams.B_ID
+}]]]></db:input-parameters>
+		</db:update>
+		<ee:transform doc:name="Transform Message" doc:id="d257aeef-a6e0-4b26-894e-18708f1f5a6b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "StatusCode": "204,",
+  "Description": "Ticket is confirmed, Status Updated",
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="2f703ceb-a34d-4a9b-a335-9d4181862c16" message="#[payload]"/>
+	</flow>
+	<flow name="updateSeatAvailability" doc:id="841f6ada-674b-436a-8c4e-b40df983f804" >
+		<db:update doc:name="Update Availability Slots" doc:id="fa498997-a108-41f5-a03b-0fa509b698c9" config-ref="Database_Config">
+			<db:sql ><![CDATA[UPDATE Movie_Availability SET AVAILABLE_SEATS = (AVAILABLE_SEATS - :SEATS) WHERE M_ID = :M_ID and T_ID = :T_ID and DATE = :DATE and SLOT = :SLOT ]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+"SEATS" : payload.SEATS,
+"M_ID" : payload.M_ID,
+"T_ID" : payload.T_ID,
+"DATE" : payload.DATE,
+"SLOT" : payload.SLOT
+}]]]></db:input-parameters>
+		</db:update>
+		<ee:transform doc:name="Transform Message" doc:id="2caed8e2-bf92-4299-8034-b9b88fa678a0" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+  "StatusCode": "204,",
+  "Description": "Availability Slots for the movie updated.",
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="2bfe09a1-bf5d-4fb9-bbd5-293618a5bc1e" message="Seat Availability Updated"/>
+	</flow>
+	<flow name="createTransactionDetails" doc:id="cd27fede-4908-440c-b9d5-262ac7198dd5" >
+		<set-variable value="#[uuid()]" doc:name="Set Variable" doc:id="023cbdc5-a7ba-4b03-8a2a-743145fac1fc" variableName="Tx_Id"/>
+		<db:insert doc:name="Insert" doc:id="56064c0a-3ed3-4a2e-9f3e-5f196ae62d82" config-ref="Database_Config">
+			<db:sql ><![CDATA[Insert into Transaction_Details(TX_ID,B_ID,TOTAL_AMOUNT) values (:TX_ID,:B_ID,:TOTAL_AMOUNT)]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+"TX_ID" : vars."Tx_Id",
+"B_ID" : payload.B_ID,
+"TOTAL_AMOUNT" : payload.TOTAL_AMOUNT
+}]]]></db:input-parameters>
+		</db:insert>
+		<ee:transform doc:name="Transform Message" doc:id="424a1815-1db6-40a8-9e56-7ae3308e9251" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "StatusCode": 201,
+  "Description": "Transaction Details Successfully created..",
+  "Tx_ID": vars.Tx_Id
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="getCIDfromCityName" doc:id="fe2746b1-8c76-44d3-a9ae-cc62974d4224" >
+		<db:select doc:name="Get City Id" doc:id="96b6718e-5833-4b63-9891-c47c3dc85014" config-ref="Database_Config">
+			<db:sql ><![CDATA[select * from City where C_NAME = :C_NAME]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+"C_NAME" : attributes.uriParams.cityname
+}]]]></db:input-parameters>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="1c2f2be7-1de0-4993-804e-bd6f6f32c3bc" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="getMovieAvailibilityFromTheatreId" doc:id="9987ed6b-3cf2-44d2-ae04-b004e02803b7" >
+		<db:select doc:name="getMovieIdFromTheatreId" doc:id="88c8167d-0b7c-4c85-83ec-058f075bf718" config-ref="Database_Config">
+			<db:sql ><![CDATA[select DISTINCT M_ID from Movie_Availability where STATUS = 'ACTIVE' and T_ID = :T_ID]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+"T_ID" : attributes.uriParams.T_ID
+}]]]></db:input-parameters>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="ba52ca9e-8f6c-45d9-9392-04dad863f852" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	M_ID : payload01.M_ID
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="getAllCities" doc:id="d4ec3908-3874-4d53-972e-e64f679b2589" >
+		<db:select doc:name="Get All Cities" doc:id="83e35c6a-019c-47a1-a853-689d2c45a801" config-ref="Database_Config">
+			<db:sql ><![CDATA[select * from City]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="381cb1ef-5dc2-4948-a166-f9a616688b7e" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

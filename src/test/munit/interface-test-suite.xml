@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="interface-test-suite.xml" />
+	<munit:test name="interface-test-suite-int-sys-movie-api-mainTest" doc:id="4eae7744-3b8a-4449-969e-39f145d8050b" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to int-sys-movie-api-main" doc:id="4a278486-c1f9-45de-8d47-df8c2b92f12e" name="int-sys-movie-api-main"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="1b0c3f62-337c-4044-9d56-76c7a33423f1" message="Payload is null " expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="interface-test-suite-patch:\booking\confirm:int-sys-movie-api-configTest" doc:id="9daef91f-2a93-440e-aaf3-2ce9cc94cba1" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to patch:\booking\confirm:int-sys-movie-api-config" doc:id="709bfe7d-edda-4c7d-ab86-7e9f1a7243eb" name="patch:\booking\confirm:int-sys-movie-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="2c19b206-0ce0-464f-9f36-6c858199d039" message="payload is null " expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="interface-test-suite-get:\city\allcities:int-sys-movie-api-configTest" doc:id="864618dd-11f9-47f4-9fb6-62c7c105cbc6" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\city\allcities:int-sys-movie-api-config" doc:id="564c36fd-e2b2-4642-8277-3cdba01b4e50" name="get:\city\allcities:int-sys-movie-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="d33bbfc9-b300-4166-97dd-012cfcac2c63" message="payload is null " expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="interface-test-suite-get:\availibility:int-sys-movie-api-configTest" doc:id="7e00ceee-4072-4c6e-b537-62374c3d60bf" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\availibility:int-sys-movie-api-config" doc:id="08a94d5e-aec0-4fa5-b324-090b27de8e15" name="get:\availibility:int-sys-movie-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="8a37f8e0-3891-4168-9278-ba0d1c97edf8" message="payload is null " expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="interface-test-suite-get:\availibility\moviecity:int-sys-movie-api-configTest" doc:id="6a2ca9a7-8b60-4ea9-9c55-868ca8379931" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\availibility\moviecity:int-sys-movie-api-config" doc:id="761f7f6b-a7c6-4651-9953-4877e4628297" name="get:\availibility\moviecity:int-sys-movie-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="cd8e964b-b819-4784-985f-003da42812ab" message="payload is null " expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="interface-test-suite-get:\movie:int-sys-movie-api-configTest" doc:id="812760cd-454b-497d-af9a-2faefdc15544" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\movie:int-sys-movie-api-config" doc:id="6f493941-d3d0-40bd-8814-57058ca4d95c" name="get:\movie:int-sys-movie-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="3b5e9462-ae3f-4f1d-85d9-770fb608b894" message="payload is null" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="interface-test-suite-get:\slotavailibility:int-sys-movie-api-configTest" doc:id="08ce24a9-bd99-49a4-bc42-d4af80c53d02" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\slotavailibility:int-sys-movie-api-config" doc:id="019e13a6-72d5-4f17-95e9-52f668072370" name="get:\slotavailibility:int-sys-movie-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="f01d6455-3ce1-4779-9a48-63561bbb7125" message="payload is null " expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="interface-test-suite-get:\theatre:int-sys-movie-api-configTest" doc:id="5cc2bcb1-cff1-49ac-9d15-241581817998" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\theatre:int-sys-movie-api-config" doc:id="80062b47-e7df-412d-8b49-1f001affae24" name="get:\theatre:int-sys-movie-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="248a8c33-975c-420a-8b7e-a8c7856d673a" message="payload is null" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+			<munit-tools:assert-that doc:name="Assert that" doc:id="fa832f0c-7c14-4a57-8552-ff7dd571987b" message="media type invalid " is="#[MunitTools::withMediaType('application/json')]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="interface-test-suite-get:\booking\(BID):int-sys-movie-api-configTest" doc:id="02e428e6-276a-43be-b0aa-a3175e1164c8" description="Test">
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="66f35089-a9f0-4735-9bec-9a147ed76091" >
+				<munit:attributes value="#[{uriParams:{B_ID:'B1234123'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to get:\booking\(BID):int-sys-movie-api-config" doc:id="abf081b1-4318-4c89-9aee-1404ab42bbcd" name="get:\booking\(BID):int-sys-movie-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="c8fbb7a8-e214-4d3a-9d21-26d6e28f2db2" is="#[MunitTools::notNullValue()]" message="payload is null " expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="interface-test-suite-get:\theatre\gettheatrebycid\(C_ID):int-sys-movie-api-configTest" doc:id="2fd8b8a2-5776-4755-ab70-197b0a798882" description="Test">
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="3ab0f1b7-0489-4906-8341-3a6c53b46bc7" />
+			<flow-ref doc:name="Flow-ref to get:\theatre\gettheatrebycid\(C_ID):int-sys-movie-api-config" doc:id="fc31c9b3-50a6-4ee9-8877-0db77265f249" name="get:\theatre\gettheatrebycid\(C_ID):int-sys-movie-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="efc17cf1-3403-4e54-8150-0ef94c4b814c" message="payload is null " expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="interface-test-suite-get:\movie\(M_ID):int-sys-movie-api-configTest" doc:id="c90c06ea-0db1-42db-bc60-fb0aaf69375a" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\movie\(M_ID):int-sys-movie-api-config" doc:id="c4376290-019a-4955-9099-9b18b759aaaa" name="get:\movie\(M_ID):int-sys-movie-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="6ab8b828-603b-4214-8d5d-bf648e99e45f" message="payload is null " expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="interface-test-suite-get:\theatre\(T_ID):int-sys-movie-api-configTest" doc:id="33f26c74-257e-4a2d-93ef-392835b0f01e" description="Test">
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="3bf18f5c-1d55-475c-b5f3-2c09e5965703" >
+				<munit:attributes value="#[{uriParams:{T_ID:'200'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to get:\theatre\(T_ID):int-sys-movie-api-config" doc:id="35852a0f-1305-4ac8-bbe7-aefdb8ff5eb2" name="get:\theatre\(T_ID):int-sys-movie-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="dc4f7ad2-7635-4f17-986d-37bd68e4728e" message="payload is null " expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="interface-test-suite-get:\availibility\(T_ID):int-sys-movie-api-configTest" doc:id="dc3dca5f-43e5-4f3a-b16f-d896be68bdbe" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\availibility\(T_ID):int-sys-movie-api-config" doc:id="9bf18ef8-44bd-491e-8a21-1c5ccadeb3e6" name="get:\availibility\(T_ID):int-sys-movie-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="44f088b5-98fd-4b00-98d1-b9cafed1c7e4" message="payload is null " expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="interface-test-suite-get:\city\(cityname):int-sys-movie-api-configTest" doc:id="4280bdb7-bf6d-42ad-a3f7-2e44fd88afd9" description="Test">
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="85bfb0c8-135d-47bb-a243-2b9308801e49" >
+				<munit:attributes value="#[{uriParams:{'cityname':'Chennai'}}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to get:\city\(cityname):int-sys-movie-api-config" doc:id="725a652c-0543-4513-abfa-5de412b83afd" name="get:\city\(cityname):int-sys-movie-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="30c3957d-5c78-4cca-9f7a-d502c50e2be1" is="#[MunitTools::notNullValue()]" message="payload is null " expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="interface-test-suite-post:\booking\transaction:application\json:int-sys-movie-api-configTest" doc:id="0f3b9caa-105a-4608-8b8d-6c197dbe1d00" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="ef8845dc-8353-4d86-ac97-d18bdcaf2ac6" processor="flow">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="post:\booking\create:application\json:int-sys-movie-api-config" attributeName="name" />
+					<munit-tools:with-attribute whereValue="POST" attributeName="Method" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to post:\booking\transaction:application\json:int-sys-movie-api-config" doc:id="12487388-69a1-4841-b61c-c84b10c98c9a" name="post:\booking\transaction:application\json:int-sys-movie-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="2d09329d-382a-49c3-befd-622decf4de31" message="payload is not null " expression="#[payload]" is="#[MunitTools::nullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="interface-test-suite-patch:\slotavailibility\updateslot:application\json:int-sys-movie-api-configTest" doc:id="741afa8c-dd78-46b3-84cf-faf4faa743ba" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to patch:\slotavailibility\updateslot:application\json:int-sys-movie-api-config" doc:id="caa6d892-a4fc-48a1-ab36-55aadd6ee2ad" name="patch:\slotavailibility\updateslot:application\json:int-sys-movie-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="c9b93232-04a7-4ced-b97c-eddb417e735e" is="#[MunitTools::notNullValue()]" message="payload is null" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="interface-test-suite-post:\booking\create:application\json:int-sys-movie-api-configTest" doc:id="4384923c-1ae6-4f52-bb80-5d7d960d58e5" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to post:\booking\create:application\json:int-sys-movie-api-config" doc:id="f2f88e19-3f6a-4bc7-bf04-018b1f2acb5d" name="post:\booking\create:application\json:int-sys-movie-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="cb9e1959-75b9-4586-8963-cc82c95e7f84" message="payload is null " expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+			<munit-tools:assert-that doc:name="Assert that" doc:id="2c35f746-58e1-4351-bb07-11c9ef841c3e" expression="#[payload]" is="#[MunitTools::withMediaType('application/json')]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="interface-test-suite-patch:\availibility\update:int-sys-movie-api-configTest" doc:id="52970d1f-4a41-47d8-94b6-c6fff0ed0250" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to patch:\availibility\update:int-sys-movie-api-config" doc:id="a2483de9-b203-4cba-8b43-f7d4cd2af8af" name="patch:\availibility\update:int-sys-movie-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="bd87288b-2014-4e86-9d25-ed0fd287a204" message="payload is null " expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>
